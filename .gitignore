@@ -1,0 +1,6 @@
+# Ignore the build directory
+build
+
+# Ignore user specific Xcode preferences
+RateThatSong.xcodeproj/*.pbxuser
+RateThatSong.xcodeproj/*.perspectivev3

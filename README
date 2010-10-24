@@ -1,0 +1,19 @@
+Application for rating songs from internet radio played via iTunes.
+
+Features:
+* Simple rating scheme: -, unrated, + and ++.
+* Status bar icon for quickly rating the current track.
+* Optional growl integration for notification of track changes.
+
+Limitations:
+* Only works with iTunes, and only where the internet radio station provides track information.
+* Simplistic file format as output, currently appends rated songs to a file called Songs.txt in the users Documents directory.
+
+License:
+* GPLv3
+
+Third Party Libraries:
+* Includes the Growl.framework library, see http://growl.info/ for more information.
+
+Supported Architectures:
+* Intel Mac OS X 10.6 and above (64 bit).
