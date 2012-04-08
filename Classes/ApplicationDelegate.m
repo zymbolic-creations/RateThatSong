@@ -76,6 +76,7 @@
 	songs = [[NSMutableArray alloc] init];
 
 	[self createStatusMenu];
+    [self updateStatusMenuWithSong:nil];
 }
 
 
@@ -124,7 +125,7 @@
 	NSMenu *menu = [[NSMenu alloc] initWithTitle:@"RateThatSong"];
 	menu.autoenablesItems = NO;
 
-	trackMenuItem = [[NSMenuItem alloc] initWithTitle:@"Fetching Track..." action:nil keyEquivalent:@""];
+	trackMenuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
 	[trackMenuItem setEnabled:NO];
 	
 	ratingBadMenuItem = [[NSMenuItem alloc] initWithTitle:@"-" action:@selector(changeRatingAction:) keyEquivalent:@""];
@@ -169,13 +170,32 @@
 
 
 - (void)updateStatusMenuWithSong:(Song *)song {
-	trackMenuItem.title = [NSString stringWithFormat:@"%@ - %@", song.artist, song.track];
-	
-	Rating rating = song.rating;
-	[ratingBadMenuItem setState:rating == RatingBad ? NSOnState : NSOffState];
-	[ratingNoneMenuItem setState:rating == RatingNone ? NSOnState : NSOffState];
-	[ratingGoodMenuItem setState:rating == RatingGood ? NSOnState : NSOffState];
-	[ratingVeryGoodMenuItem setState:rating == RatingVeryGood ? NSOnState : NSOffState];
+    BOOL menuItemsEnabled;
+    
+    if (song) {
+
+        trackMenuItem.title = [NSString stringWithFormat:@"%@ - %@", song.artist, song.track];
+        
+        Rating rating = song.rating;
+        [ratingBadMenuItem setState:rating == RatingBad ? NSOnState : NSOffState];
+        [ratingNoneMenuItem setState:rating == RatingNone ? NSOnState : NSOffState];
+        [ratingGoodMenuItem setState:rating == RatingGood ? NSOnState : NSOffState];
+        [ratingVeryGoodMenuItem setState:rating == RatingVeryGood ? NSOnState : NSOffState];
+        
+        menuItemsEnabled = YES;
+        
+    } else {
+        
+        trackMenuItem.title = @"Fetching Track...";
+        
+        menuItemsEnabled = NO;
+        
+    }
+    
+    [ratingBadMenuItem setEnabled:menuItemsEnabled];
+    [ratingNoneMenuItem setEnabled:menuItemsEnabled];
+    [ratingGoodMenuItem setEnabled:menuItemsEnabled];
+    [ratingVeryGoodMenuItem setEnabled:menuItemsEnabled];
 }
 
 
@@ -184,6 +204,13 @@
 
 
 - (void)songChanged:(NSString *)song {
+    
+    if (!song) {
+        self.currentSong = nil;
+        [self updateStatusMenuWithSong:nil];
+        return;
+    }
+    
 	[GrowlApplicationBridge notifyWithTitle:@"Track Changed" description:song notificationName:@"Track Changed" iconData:nil priority:-1 isSticky:NO clickContext:@""];
 
 	Song *newSong = [[Song alloc] init];

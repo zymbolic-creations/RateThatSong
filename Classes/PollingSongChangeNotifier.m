@@ -54,7 +54,8 @@
     if ([iTunes isRunning]) {
 		NSString *reportedSong = iTunes.currentStreamTitle;
 		
-		if (![reportedSong isEqualToString:currentSong]) {
+        // Check if the song title has changed, being careful with nil==nil comparisons
+		if (!(reportedSong == currentSong || [reportedSong isEqualToString:currentSong])) {
 			self.currentSong = reportedSong;
 			
 			[delegate songChanged:currentSong];

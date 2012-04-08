@@ -36,8 +36,9 @@
 			return @"+";
 		case RatingVeryGood:
 			return @"++";
+        default:
+            return @"";
 	}
-	return @"";
 }
 
 
